@@ -1,0 +1,17 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: root
+  password:
+  socket: /var/lib/mysql/mysql.sock
+
+development:
+  <<: *default
+  database: shandong_development
+
+production:
+  <<: *default
+  database: shandong_production
+  username: shandong
+  password: <%= ENV['SHANDONG_DATABASE_PASSWORD'] %>

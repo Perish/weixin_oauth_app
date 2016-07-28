@@ -24,7 +24,8 @@ class WeixinUsersController < ApplicationController
 		render json: wu
 	else 
 		# 如果获得的access_token 为空就跳转到默认链接
-		redirect_to session.delete(:path)
+		# redirect_to session.delete(:path)
+		render text: ""
 	end
   end
 

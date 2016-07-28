@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160728135917) do
+ActiveRecord::Schema.define(version: 20160728152527) do
 
   create_table "weixin_user_tokens", force: :cascade do |t|
     t.text     "access_token"
@@ -32,9 +32,11 @@ ActiveRecord::Schema.define(version: 20160728135917) do
     t.string   "headimgurl"
     t.text     "privilege"
     t.string   "unionid"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.string   "language"
+    t.integer  "weixin_user_token_id"
+    t.index ["weixin_user_token_id"], name: "index_weixin_users_on_weixin_user_token_id"
   end
 
 end

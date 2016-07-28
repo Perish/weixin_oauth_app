@@ -41,7 +41,7 @@ class WeixinUsersController < ApplicationController
   # 用户信息保存
   def user_info_save_or_update(wut)
 	user_info = $client.get_oauth_userinfo(wut.openid, wut.access_token)
-	return WeixinUser.create(user_info.result) if user_info.en_msg == "ok"
+	return wut.create_weixin_user(user_info.result) if user_info.en_msg == "ok"
   end
 
   private

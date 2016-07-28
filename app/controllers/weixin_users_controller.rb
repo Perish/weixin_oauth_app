@@ -9,7 +9,8 @@ class WeixinUsersController < ApplicationController
   	if @weixin_user.present?
   		render json: @weixin_user
   	else
-  		$client.authorize_url(code_weixin_users_url, "snsapi_userinfo") and return
+  		$client.authorize_url(code_weixin_users_url, "snsapi_userinfo")
+  		render text: ""
   	end
   end
 

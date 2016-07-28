@@ -4,11 +4,12 @@ class WeixinUsersController < ApplicationController
 
   def index
   	# 存储
+
   	session[:path] = params[:path] if params[:path].present?
   	if @weixin_user.present?
   		render json: @weixin_user
   	else
-  		$client.authorize_url(code_weixin_users_path, "snsapi_userinfo")
+  		$client.authorize_url(code_weixin_users_url, "snsapi_userinfo") and return
   	end
   end
 

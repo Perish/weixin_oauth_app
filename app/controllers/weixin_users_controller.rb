@@ -18,14 +18,14 @@ class WeixinUsersController < ApplicationController
   	# 获得openid和access_token
 	sns_info = $client.get_oauth_access_token(params[:code])
 	Rails.logger.info "sns_info==============#{sns_info.inspect}"
-	# if sns_info["access_token"].blank? 
-	# 	# 如果获得的access_token 为空就跳转到默认链接
-	# 	redirect_to session.delete(:path)
-	# else 
-	# 	weixin_user_token = token_save_or_update(sns_info)
-	# 	wu = user_info_save_or_update(weixin_user_token)
-	# 	render json: wu
-	# end
+	if sns_info.en_msg == "ok"
+		weixin_user_token = token_save_or_update(sns_info.result)
+		wu = user_info_save_or_update(weixin_user_token)
+		render json: wu
+	else 
+		# 如果获得的access_token 为空就跳转到默认链接
+		redirect_to session.delete(:path)
+	end
   end
 
   # 保存access_token 
@@ -40,9 +40,12 @@ class WeixinUsersController < ApplicationController
   # 用户信息保存
   def user_info_save_or_update(wut)
 	user_info = $client.get_oauth_userinfo(wut.openid, wut.access_token)
-	wu = WeixinUser.create(user_info)
-	session[:openid] = wu.openid
-	wu
+	Rails.logger.info "user_info==============#{user_info.inspect}"
+	if user_info.en_msg == "ok"
+		wu = WeixinUser.create(user_info.result)
+		session[:openid] = wu.openid
+		wu
+	end
   end
 
   private

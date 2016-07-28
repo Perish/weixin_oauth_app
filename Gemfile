@@ -38,6 +38,8 @@ group :production do
   gem 'mysql2', '>= 0.3.18', '< 0.5'
 end
 
+gem 'weixin_authorize'
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console'

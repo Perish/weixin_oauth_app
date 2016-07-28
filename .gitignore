@@ -22,3 +22,4 @@
 /config/database.yml
 /config/deploy.rb
 /config/secrets.yml
+/config/initializers/weixin_authorize.rb

@@ -20,6 +20,8 @@ class WeixinUsersController < ApplicationController
 	Rails.logger.info "sns_info==============#{sns_info.inspect}"
 	if sns_info.en_msg == "ok"
 		weixin_user_token = token_save_or_update(sns_info.result)
+		Rails.logger.info "weixin_user_token=================#{weixin_user_token.inspect}"
+		Rails.logger.info "weixin_user_token==========errors=======#{weixin_user_token.errors.inspect}"
 		wu = user_info_save_or_update(weixin_user_token)
 		render json: wu
 	else 
@@ -30,11 +32,11 @@ class WeixinUsersController < ApplicationController
   end
 
   # 保存access_token 
-  def token_save_or_update(sns_info)
-  	weixin_user_token = WeixinUserToken.find_by(openid: sns_info["openid"])
-  	sns_info["expires_in"] -= 100
-  	return WeixinUserToken.create(sns_info) if weixin_user_token.blank?
-  	weixin_user_token.update(sns_info)
+  def token_save_or_update(result)
+  	weixin_user_token = WeixinUserToken.find_by(openid: result["openid"])
+  	result["expires_in"] -= 100
+  	return WeixinUserToken.create(result) if weixin_user_token.blank?
+  	weixin_user_token.update(result)
   	weixin_user_token
   end
 

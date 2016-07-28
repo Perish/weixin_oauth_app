@@ -11,7 +11,7 @@ module WeixinOauthApp
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-    config.i18n.default_locale = "zh-CN"
+    I18n.config.available_locales = :en
     config.time_zone = "Beijing"
   end
 end

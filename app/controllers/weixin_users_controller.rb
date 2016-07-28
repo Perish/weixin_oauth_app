@@ -6,7 +6,7 @@ class WeixinUsersController < ApplicationController
   	# 存储
   	session[:path] = params[:path] if params[:path].present?
   	if @weixin_user.present?
-  		render json: @weixin_user
+  		render text: @weixin_user.inspect
   	else
   		redirect_to $client.authorize_url(code_weixin_users_url, "snsapi_userinfo")
   	end
@@ -17,11 +17,8 @@ class WeixinUsersController < ApplicationController
   def code
   	# 获得openid和access_token
 	sns_info = $client.get_oauth_access_token(params[:code])
-	Rails.logger.info "sns_info==============#{sns_info.inspect}"
 	if sns_info.en_msg == "ok"
 		weixin_user_token = token_save_or_update(sns_info.result)
-		Rails.logger.info "weixin_user_token=================#{weixin_user_token.inspect}"
-		Rails.logger.info "weixin_user_token==========errors=======#{weixin_user_token.errors.inspect}"
 		wu = user_info_save_or_update(weixin_user_token)
 		render json: wu
 	else 
@@ -35,6 +32,7 @@ class WeixinUsersController < ApplicationController
   def token_save_or_update(result)
   	weixin_user_token = WeixinUserToken.find_by(openid: result["openid"])
   	result["expires_in"] -= 100
+  	session[:openid] = result["openid"]
   	return WeixinUserToken.create(result) if weixin_user_token.blank?
   	weixin_user_token.update(result)
   	weixin_user_token
@@ -43,12 +41,7 @@ class WeixinUsersController < ApplicationController
   # 用户信息保存
   def user_info_save_or_update(wut)
 	user_info = $client.get_oauth_userinfo(wut.openid, wut.access_token)
-	Rails.logger.info "user_info==============#{user_info.inspect}"
-	if user_info.en_msg == "ok"
-		wu = WeixinUser.create(user_info.result)
-		session[:openid] = wu.openid
-		wu
-	end
+	return WeixinUser.create(user_info.result) if user_info.en_msg == "ok"
   end
 
   private

@@ -23,3 +23,5 @@
 /config/deploy.rb
 /config/secrets.yml
 /config/initializers/weixin_authorize.rb
+/config/initializers/domains.rb
+/public/uploads/

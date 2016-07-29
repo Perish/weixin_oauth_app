@@ -25,3 +25,4 @@
 /config/initializers/weixin_authorize.rb
 /config/initializers/domains.rb
 /public/uploads/
+read.md

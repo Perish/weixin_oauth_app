@@ -1,14 +1,13 @@
 class WeixinUsersController < ApplicationController
-  before_action :weixin_user
   before_action :is_code?, only: [:code]
 
   def index
   	# 存储
   	session[:path] = params[:path] if params[:path].present?
-  	weixin_user = WeixinUser.find_by(openid: session[:openid])
-  	if weixin_user.present?
+  	wu = WeixinUser.find_by(openid: session[:openid])
+  	if wu.present?
   		# 如果用户存在直接返回
-  		render json: weixin_user
+  		render json: wu
   	else
   		# 用户去认证
   		session.delete(:openid)
@@ -38,7 +37,7 @@ class WeixinUsersController < ApplicationController
 
   # 发送客服消息
   def create
-  	
+  	$client.send_text_custom(to_user, content)
   end
 
   private

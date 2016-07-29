@@ -41,7 +41,6 @@ class WeixinUsersController < ApplicationController
 	end
   end
 
-
   # 发送客服消息
   def create
   	users_arr = params[:to_users]

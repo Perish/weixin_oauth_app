@@ -6,11 +6,8 @@ class WeixinUserToken < ApplicationRecord
 	def deal_with_weixin_user
 		user_info = $client.get_oauth_userinfo(openid, access_token)
 		if user_info.en_msg == "ok" 
-			if weixin_user.blank?
-				create_weixin_user(user_info.result) 
-			else
-				weixin_user.update(user_info.result)
-			end
+			return create_weixin_user(user_info.result)  if weixin_user.blank?
+			weixin_user.update(user_info.result)
 		end
 		weixin_user
 	end

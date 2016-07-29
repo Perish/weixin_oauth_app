@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :weixin_users, only: [:index] do
+  resources :weixin_users, only: [:index, :create] do
   	collection do
   		get :code
   	end

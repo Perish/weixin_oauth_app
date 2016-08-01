@@ -1,0 +1,11 @@
+<div style="margin: 0 auto; text-align: center;">
+	<h3>登陆</h3>
+	<%= form_tag login_path do %>
+		<label>用户名</label>
+		<%= text_field_tag :name, params[:name], required: true %>
+		<label>密码</label>
+		<%= password_field_tag :password, "", required: true %>
+
+		<%= submit_tag "登陆" %>
+	<% end %>
+</div>

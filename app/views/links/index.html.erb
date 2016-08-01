@@ -1,0 +1,7 @@
+<div style="margin: 0 auto; text-align: center;">
+  <p>用户对接接口</p>
+  <% if notice.present? %>
+  <p style="background-color: green;padding: 15px;color:white;"><%= notice %></p>
+  <% end %>
+  <%= render 'form', link: @link  %>
+</div>

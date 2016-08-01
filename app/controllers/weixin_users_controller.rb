@@ -8,7 +8,10 @@ class WeixinUsersController < ApplicationController
   	wu = WeixinUser.find_by(openid: session[:openid])
   	if wu.present?
   		# 如果用户存在直接发送用户信息给接口
-  		render json: wu
+      link = Link.first.link
+      RestClient.post link, {user_token: session[:user_token], weixin_user: wu}.to_json, :content_type => :json, :accept => :json
+      session.delete(:user_token)
+      redirect_to session.delete(:back_link)
   	else
   		# 用户去认证
   		session.delete(:openid)
@@ -18,27 +21,23 @@ class WeixinUsersController < ApplicationController
 
   def code
   	# 获得openid和access_token
-	sns_info = $client.get_oauth_access_token(params[:code])
-	if sns_info.en_msg == "ok"
-		# 保存或者更新weixin_user_token
-		weixin_user_token = WeixinUserToken.deal_with_self(sns_info.result)
-		if weixin_user_token&.id.present?
-		  	session[:openid] = weixin_user_token.openid
-		  	# 保存或者更新weixin_user
-			weixin_user_token.deal_with_weixin_user
-		end
-		if weixin_user_token&.weixin_user
-  			# 如果用户存在直接发送用户信息给接口
-			render json: weixin_user_token&.weixin_user
-  		else
-			session.delete(:user_token)
-  			redirect_to session.delete(:back_link)
+  	sns_info = $client.get_oauth_access_token(params[:code])
+  	if sns_info.en_msg == "ok"
+  		# 保存或者更新weixin_user_token
+  		weixin_user_token = WeixinUserToken.deal_with_self(sns_info.result)
+  		if weixin_user_token&.id.present?
+  		  	session[:openid] = weixin_user_token.openid
+  		  	# 保存或者更新weixin_user
+  			  weixin_user_token.deal_with_weixin_user
   		end
-	else 
-		# 如果获得的access_token 为空就跳转到默认链接
-		session.delete(:user_token)
-		redirect_to session.delete(:back_link)
-	end
+  		if weixin_user_token&.weixin_user
+    			# 如果用户存在直接发送用户信息给接口
+          link = Link.first.link
+          RestClient.post link, {user_token: session[:user_token], weixin_user: weixin_user_token&.weixin_user}.to_json, :content_type => :json, :accept => :json
+    		end
+  	end
+    session.delete(:user_token)
+    redirect_to session.delete(:back_link)
   end
 
   # 发送客服消息
@@ -59,9 +58,9 @@ class WeixinUsersController < ApplicationController
 
   def is_code?
   	if params[:code].blank?
-		# 如果不存在就返回到默认链接
-		session.delete(:user_token)
-		redirect_to session.delete(:back_link) and return
+  		# 如果不存在就返回到默认链接
+  		session.delete(:user_token)
+  		redirect_to session.delete(:back_link) and return
   	end
   end
 

@@ -1,40 +1,20 @@
 class WeixinUsersController < ApplicationController
   before_action :is_code?, only: [:code]
 
+  before_action :find_session_weixin_user, only: :index
+
   def index
-  	# 存储
-  	session[:back_link] = params[:back_link] if params[:back_link].present?
-  	session[:user_token] = params[:user_token] if params[:user_token].present?
-  	wu = WeixinUser.find_by(openid: session[:openid])
-  	if wu.present?
   		# 如果用户存在直接发送用户信息给接口
-      link = Link.first.link
-      RestClient.post link, {user_token: session[:user_token], weixin_user: wu}.to_json, :content_type => :json, :accept => :json
-      session.delete(:user_token)
+      @wu.post_info(session.delete(:user_token))
       redirect_to session.delete(:back_link)
-  	else
-  		# 用户去认证
-  		session.delete(:openid)
-  		redirect_to $client.authorize_url(code_weixin_users_url, "snsapi_userinfo")
-  	end
   end
 
   def code
   	# 获得openid和access_token
   	sns_info = $client.get_oauth_access_token(params[:code])
   	if sns_info.en_msg == "ok"
-  		# 保存或者更新weixin_user_token
-  		weixin_user_token = WeixinUserToken.deal_with_self(sns_info.result)
-  		if weixin_user_token&.id.present?
-  		  	session[:openid] = weixin_user_token.openid
-  		  	# 保存或者更新weixin_user
-  			  weixin_user_token.deal_with_weixin_user
-  		end
-  		if weixin_user_token&.weixin_user
-    			# 如果用户存在直接发送用户信息给接口
-          link = Link.first.link
-          RestClient.post link, {user_token: session[:user_token], weixin_user: weixin_user_token&.weixin_user}.to_json, :content_type => :json, :accept => :json
-    		end
+  		# 保存或者更新weixin_user_token 如果用户存在直接发送用户信息给接口
+  		WeixinUserToken.deal_with_self(sns_info.result)&.weixin_user&.post_info(session[:user_token])
   	end
     session.delete(:user_token)
     redirect_to session.delete(:back_link)
@@ -48,7 +28,7 @@ class WeixinUsersController < ApplicationController
   		users_arr.each do |openid|
   			$client.send_text_custom(openid, content)
   		end
-		render json: {status: "success"}  		
+		  render json: {status: "success"}  		
   	else
   		render json: {status: "fail"}
   	end
@@ -63,5 +43,19 @@ class WeixinUsersController < ApplicationController
   		redirect_to session.delete(:back_link) and return
   	end
   end
+
+  def find_session_weixin_user
+    # 存储
+    session[:back_link] = params[:back_link] if params[:back_link].present?
+    session[:user_token] = params[:user_token] if params[:user_token].present?
+    @wu = WeixinUser.find_by(openid: session[:openid])
+    if @wu.blank?
+      # 用户去认证
+      session.delete(:openid)
+      redirect_to $client.authorize_url(code_weixin_users_url, "snsapi_userinfo") and return
+    end
+
+  end
+
 
 end

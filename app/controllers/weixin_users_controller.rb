@@ -15,6 +15,7 @@ class WeixinUsersController < ApplicationController
   	if sns_info.en_msg == "ok"
   		# 保存或者更新weixin_user_token 如果用户存在直接发送用户信息给接口
   		WeixinUserToken.deal_with_self(sns_info.result)&.weixin_user&.post_info(session[:user_token])
+      session[:openid] = sns_info.result["openid"] if sns_info.result["openid"]
   	end
     session.delete(:user_token)
     redirect_to session.delete(:back_link)

@@ -6,6 +6,7 @@ class WeixinUser < ApplicationRecord
 
 	def post_info(user_token)
 		link = Link.first.link
+		Rails.logger.info "link-------post-info-------#{link}"
 		RestClient.post link, {user_token: user_token, weixin_user: self}.to_json, :content_type => :json, :accept => :json
 	end
 

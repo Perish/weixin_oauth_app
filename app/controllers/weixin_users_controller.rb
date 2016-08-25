@@ -69,8 +69,11 @@ class WeixinUsersController < ApplicationController
     Rails.logger.info "wu=========next_redirect--------#{wu.inspect}"
       redirect_to session.delete(:back_link) and return if wu.blank?
       str = wu.apids.join
+    Rails.logger.info "wu=========next_redirect----1----#{str}"
       redirect_to_authorize_url($client2, "snsapi_base", "2A#{wu.id}") and return if str == "1"
+    Rails.logger.info "wu=========next_redirect---2-----#{str}"
       redirect_to_authorize_url($client1, "snsapi_base", "1A#{wu.id}") and return if str == "2" || str.blank?
+    Rails.logger.info "wu=========next_redirect---3----#{str}"
       wu.post_info(session.delete(:user_token))
       redirect_to session.delete(:back_link)
   end

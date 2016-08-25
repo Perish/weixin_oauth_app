@@ -13,7 +13,6 @@ class WeixinUsersController < ApplicationController
       if params["state"] == "weixin"
       	# 获得openid和access_token
       	sns_info = $client.get_oauth_access_token(params[:code])
-        Rails.logger.info "code------weixin-----snsn--------#{sns_info.result.inspect}"
       	if sns_info.en_msg == "ok" 
       		# 保存或者更新weixin_user_token 如果用户存在直接发送用户信息给接口
       		token = WeixinUserToken.deal_with_self(sns_info.result)
@@ -82,6 +81,7 @@ class WeixinUsersController < ApplicationController
     begin
       redirect_to client.authorize_url(code_weixin_users_url, scope, state) and return
     rescue Exception => e
+      @wu ||= WeixinUser.find_by(openid: session[:openid])
       redirect_to session.delete(:back_link)
     end
   end

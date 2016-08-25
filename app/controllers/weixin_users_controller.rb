@@ -88,10 +88,10 @@ class WeixinUsersController < ApplicationController
         redirect_to session.delete(:back_link)
       else
         if openids.include?(1)
-          redirect_to_authorize_url($client2, "snsapi_base", "1A#{wu.id}")
+          redirect_to_authorize_url($client2, "snsapi_base", "2A#{wu.id}")
         else
           Rails.logger.info "openids======--------#{openids.inspect}"
-          redirect_to_authorize_url($client1, "snsapi_base", "2A#{wu.id}")
+          redirect_to_authorize_url($client1, "snsapi_base", "1A#{wu.id}")
         end
       end
   end

@@ -9,15 +9,15 @@ class WeixinUsersController < ApplicationController
   end
 
   def code
-    begin 
+    # begin 
       # 处理第一个公众号
       deal_first if params["state"] == "weixin"
       # 处理第二三个公众号
       deal_with(params["state"], params[:code]) if params["state"] =~ /\d/
       next_redirect(@wu)
-    rescue Exception => e
-      redirect_to session.delete(:back_link)
-    end
+    # rescue Exception => e
+    #   redirect_to session.delete(:back_link)
+    # end
   end
 
   # 发送客服消息

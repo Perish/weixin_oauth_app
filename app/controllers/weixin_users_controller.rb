@@ -80,6 +80,7 @@ class WeixinUsersController < ApplicationController
   end
 
   def next_redirect(wu)
+    Rails.logger.info "wu----------#{wu.inspect}"
       openids = wu.weixin_openids.to_a.map(&:apid)
       redirect_to session.delete(:back_link) and return if wu.blank?
       if openids.count > 2
@@ -89,6 +90,7 @@ class WeixinUsersController < ApplicationController
         if openids.include?(1)
           redirect_to_authorize_url($client2, "snsapi_base", "1A#{wu.id}")
         else
+          Rails.logger.info "openids======--------#{openids.inspect}"
           redirect_to_authorize_url($client1, "snsapi_base", "2A#{wu.id}")
         end
       end

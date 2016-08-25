@@ -14,4 +14,8 @@ class WeixinUser < ApplicationRecord
 		weixin_openids.to_a.map(&:openid).uniq
 	end
 
+	def apids
+		weixin_openids.to_a.map(&:apid).uniq
+	end
+
 end

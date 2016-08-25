@@ -10,31 +10,10 @@ class WeixinUsersController < ApplicationController
 
   def code
     begin 
-      if params["state"] == "weixin"
-      	# 获得openid和access_token
-      	sns_info = $client.get_oauth_access_token(params[:code])
-      	if sns_info.en_msg == "ok" 
-      		# 保存或者更新weixin_user_token 如果用户存在直接发送用户信息给接口
-      		token = WeixinUserToken.deal_with_self(sns_info.result)
-          @wu = token&.weixin_user
-          # token&.weixin_user&.post_info(session[:user_token])
-          session[:openid] = sns_info.result["openid"] if sns_info.result["openid"]
-      	end
-      end
-
-      if params["state"] =~ /\d/
-        apid, wuid = params["state"].split("A")
-        client = case apid
-                  when "1" then $client1
-                  when "2" then $client2
-                  end
-        @wu = WeixinUser.find_by(id: wuid)
-        sns_info = client.get_oauth_access_token(params[:code])
-        Rails.logger.info "code------stateid-----snsn--------#{sns_info.result.inspect}"
-        if sns_info.en_msg == "ok" && @wu.present?
-          @wu.weixin_openids.create(openid: sns_info.result["openid"], apid: apid)
-        end
-      end
+      # 处理第一个公众号
+      deal_first if params["state"] == "weixin"
+      # 处理第二三个公众号
+      deal_with(params["state"], params[:code]) if params["state"] =~ /\d/
       next_redirect(@wu)
     rescue Exception => e
       redirect_to session.delete(:back_link)
@@ -87,18 +66,37 @@ class WeixinUsersController < ApplicationController
   end
 
   def next_redirect(wu)
-      openids = wu.weixin_openids.to_a.map(&:apid)
       redirect_to session.delete(:back_link) and return if wu.blank?
-      if openids.count > 2
-        wu.post_info(session.delete(:user_token))
-        redirect_to session.delete(:back_link)
-      else
-        if openids.include?(1)
-          redirect_to_authorize_url($client2, "snsapi_base", "2A#{wu.id}")
-        else
-          redirect_to_authorize_url($client1, "snsapi_base", "1A#{wu.id}")
-        end
+      str = wu.apids.join
+      redirect_to_authorize_url($client2, "snsapi_base", "2A#{wu.id}") and return if str == "1"
+      redirect_to_authorize_url($client1, "snsapi_base", "1A#{wu.id}") and return if str == "2" || str.blank?
+      wu.post_info(session.delete(:user_token))
+      redirect_to session.delete(:back_link)
+  end
+
+  def deal_with(state, code)
+      apid, wuid = state.split("A")
+      client = appid == "1" ? $client1 : $client2
+      @wu = WeixinUser.find_by(id: wuid)
+      sns_info = client.get_oauth_access_token(code)
+      if sns_info.en_msg == "ok" && @wu.present?
+        @wu.weixin_openids.create(openid: sns_info.result["openid"], apid: apid)
       end
+  end
+
+  def deal_first
+    # 获得openid和access_token
+    sns_info = $client.get_oauth_access_token(params[:code])
+    if sns_info.en_msg == "ok" 
+      # 保存或者更新weixin_user_token 如果用户存在直接发送用户信息给接口
+      token = WeixinUserToken.deal_with_self(sns_info.result)
+      @wu = token&.weixin_user
+      session[:openid] = sns_info.result["openid"] if sns_info.result["openid"]
+    end
+    if @wu && @wu.apids.join == "12"  # 如果存在微信用户，并且有两个公众号的openids
+      @wu.post_info(session.delete(:user_token))
+      redirect_to session.delete(:back_link) and return
+    end
   end
 
 

@@ -14,6 +14,7 @@ class WeixinUserToken < ApplicationRecord
 	after_save :deal_with_weixin_user
 	# 保存或者更新weixin_user
 	def deal_with_weixin_user
+		return  if aid == 1
 		user_info = $client.get_oauth_userinfo(openid, access_token)
 		if user_info.en_msg == "ok" 
 			return create_weixin_user(user_info.result)  if weixin_user.blank?

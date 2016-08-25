@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160801072134) do
+ActiveRecord::Schema.define(version: 20160825080112) do
 
   create_table "links", force: :cascade do |t|
     t.string   "link"
@@ -34,8 +34,9 @@ ActiveRecord::Schema.define(version: 20160801072134) do
     t.text     "refresh_token"
     t.string   "openid"
     t.string   "scope"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "aid",           default: 1
   end
 
   create_table "weixin_users", force: :cascade do |t|

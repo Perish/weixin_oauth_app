@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  weixin_user: one
+  apid: 1
+  openid: MyString
+
+two:
+  weixin_user: two
+  apid: 1
+  openid: MyString

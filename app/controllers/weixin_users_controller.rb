@@ -9,15 +9,15 @@ class WeixinUsersController < ApplicationController
   end
 
   def code
-    # begin 
+    begin 
       # 处理第一个公众号
       deal_first if params["state"] == "weixin"
       # 处理第二三个公众号
       deal_with(params["state"], params[:code]) if params["state"] =~ /\d/
       next_redirect(@wu)
-    # rescue Exception => e
-    #   redirect_to session.delete(:back_link)
-    # end
+    rescue Exception => e
+      redirect_to session.delete(:back_link)
+    end
   end
 
   # 发送客服消息
@@ -70,19 +70,12 @@ class WeixinUsersController < ApplicationController
       str = wu.apids.join
       case str
       when "12"
-        Rails.logger.info "next_redirect-----str---12---#{str}----"
         wu.post_info(session.delete(:user_token))
         redirect_to session.delete(:back_link)
       when "1"
-        Rails.logger.info "next_redirect-----str---1---#{str}----"
         redirect_to_authorize_url($client2, "snsapi_base", "2A#{wu.id}")
-      when "2" || str.blank?
-        Rails.logger.info "next_redirect-----str---2--#{str}----"
-        redirect_to_authorize_url($client1, "snsapi_base", "1A#{wu.id}")
       else
-        Rails.logger.info "next_redirect-----str---3-#{str}----"
-        wu.post_info(session.delete(:user_token))
-        redirect_to session.delete(:back_link)
+        redirect_to_authorize_url($client1, "snsapi_base", "1A#{wu.id}")
       end
   end
 
@@ -91,9 +84,7 @@ class WeixinUsersController < ApplicationController
       client = apid == "1" ? $client1 : $client2
       @wu = WeixinUser.find_by(id: wuid)
       sns_info = client.get_oauth_access_token(code)
-      Rails.logger.info "sns_info-----appid------#{appid}----#{sns_info.inspect}"
       if sns_info.en_msg == "ok" && @wu.present?
-        Rails.logger.info "sns_info-----appid------#{appid}----#{sns_info.inspect}"
         @wu.weixin_openids.create_with(apid: apid).find_or_create_by(openid: sns_info.result["openid"])
       end
   end

@@ -70,13 +70,17 @@ class WeixinUsersController < ApplicationController
       str = wu.apids.join
       case str
       when "12"
+        Rails.logger.info "next_redirect-----str---12---#{str}----"
         wu.post_info(session.delete(:user_token))
         redirect_to session.delete(:back_link)
       when "1"
+        Rails.logger.info "next_redirect-----str---1---#{str}----"
         redirect_to_authorize_url($client2, "snsapi_base", "2A#{wu.id}")
       when "2" || str.blank?
+        Rails.logger.info "next_redirect-----str---2--#{str}----"
         redirect_to_authorize_url($client1, "snsapi_base", "1A#{wu.id}")
       else
+        Rails.logger.info "next_redirect-----str---3-#{str}----"
         wu.post_info(session.delete(:user_token))
         redirect_to session.delete(:back_link)
       end
@@ -87,8 +91,10 @@ class WeixinUsersController < ApplicationController
       client = appid == "1" ? $client1 : $client2
       @wu = WeixinUser.find_by(id: wuid)
       sns_info = client.get_oauth_access_token(code)
+      Rails.logger.info "sns_info-----appid------#{appid}----#{sns_info.inspect}"
       if sns_info.en_msg == "ok" && @wu.present?
-        @wu.weixin_openids.create(openid: sns_info.result["openid"], apid: apid)
+        Rails.logger.info "sns_info-----appid------#{appid}----#{sns_info.inspect}"
+        @wu.weixin_openids.create_with(apid: apid).find_or_create_by(openid: sns_info.result["openid"])
       end
   end
 

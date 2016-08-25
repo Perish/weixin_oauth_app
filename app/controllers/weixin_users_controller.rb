@@ -88,7 +88,7 @@ class WeixinUsersController < ApplicationController
 
   def deal_with(state, code)
       apid, wuid = state.split("A")
-      client = appid == "1" ? $client1 : $client2
+      client = apid == "1" ? $client1 : $client2
       @wu = WeixinUser.find_by(id: wuid)
       sns_info = client.get_oauth_access_token(code)
       Rails.logger.info "sns_info-----appid------#{appid}----#{sns_info.inspect}"

@@ -66,6 +66,7 @@ class WeixinUsersController < ApplicationController
   end
 
   def next_redirect(wu)
+    Rails.logger.info "wu=========next_redirect--------#{wu.inspect}"
       redirect_to session.delete(:back_link) and return if wu.blank?
       str = wu.apids.join
       redirect_to_authorize_url($client2, "snsapi_base", "2A#{wu.id}") and return if str == "1"
@@ -92,10 +93,6 @@ class WeixinUsersController < ApplicationController
       token = WeixinUserToken.deal_with_self(sns_info.result)
       @wu = token&.weixin_user
       session[:openid] = sns_info.result["openid"] if sns_info.result["openid"]
-    end
-    if @wu && @wu.apids.join == "12"  # 如果存在微信用户，并且有两个公众号的openids
-      @wu.post_info(session.delete(:user_token))
-      redirect_to session.delete(:back_link) and return
     end
   end
 

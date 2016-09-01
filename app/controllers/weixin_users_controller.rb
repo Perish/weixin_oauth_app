@@ -48,6 +48,7 @@ class WeixinUsersController < ApplicationController
     # 存储
     session[:back_link] = params[:back_link] if params[:back_link].present?
     session[:user_token] = params[:user_token] if params[:user_token].present?
+    session[:test] = params[:test]
     @wu = WeixinUser.find_by(openid: session[:openid])
     if @wu.blank?
       # 用户去认证
@@ -70,7 +71,7 @@ class WeixinUsersController < ApplicationController
       str = wu.apids.join
       case str
       when "12"
-        wu.post_info(session.delete(:user_token))
+        wu.post_info(session.delete(:user_token), session[:test])
         redirect_to session.delete(:back_link)
       when "1"
         redirect_to_authorize_url($client2, "snsapi_base", "2A#{wu.id}")

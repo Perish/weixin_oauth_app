@@ -3,5 +3,29 @@
   <% if notice.present? %>
   <p style="background-color: green;padding: 15px;color:white;"><%= notice %></p>
   <% end %>
-  <%= render 'form', link: @link  %>
+
+	<table>
+	  <thead>
+	    <tr>
+	      <th>#</th>
+	      <th>link</th>
+	      <th>type</th>
+	      <th>操作</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  <% @links.each do |lin| %>
+		    <tr>
+		      <th scope="row"><%= lin.id %></th>
+		      <td><%= lin.link %></td>
+		      <td><%= lin.link_type == 0 ? "生产" : "测试" %></td>
+		      <td>
+			      <%= link_to "编辑", edit_link_path(lin) %>|
+			      <%= link_to "删除", link_path(lin), method: :delete, data: {confirm: "确定删除"} %>
+		      </td>
+		    </tr>
+	  <% end %>
+	  </tbody>
+	</table>
+	<%= link_to "添加", new_link_path %>
 </div>

@@ -1,3 +1,3 @@
 class User < ApplicationRecord
-	has_one :link
+	has_many :links
 end

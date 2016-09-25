@@ -16,7 +16,7 @@ class WeixinUser < ApplicationRecord
 
 	def self.deal_scan(xml)
 		wu = WeixinUser.where(openid: xml[:FromUserName]).first_or_initialize do |user|
-			user.scene = xml[:EventKey]
+			user.scene = xml[:EventKey].gsub("qrscene_", "") if xml[:EventKey].present?
 		end
 		if wu.persisted?
 			wu.update_column(:scene, xml[:EventKey].gsub("qrscene_", "")) if xml[:EventKey].present? && wu.scene.blank?

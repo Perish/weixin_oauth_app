@@ -2,15 +2,13 @@ class WeixinController < ApplicationController
 	protect_from_forgery except: [:receive, :auth]
 	def receive
 		ActionController::Parameters.permit_all_parameters = true
-		Rails.logger.info "params===========#{params.inspect}"
-		Rails.logger.info "params==to_h=========#{params.to_h}"
-		if params[:id].to_i = 1230 && params[:xml].present?
+		if params[:id].to_i == 1230 && params[:xml].present?
 			case params[:xml][:Event]
 			when "SCAN" then WeixinUser.deal_scan(params[:xml])
 			end
-		else
-			render text: ""
 		end
+		render text: ""
+
 	end
 
 	def auth

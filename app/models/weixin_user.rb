@@ -31,12 +31,12 @@ class WeixinUser < ApplicationRecord
 			           {	
 			               "type":"view",
 			               "name":"协会简介",
-			               "url":"http://weixin.cwrcpj.org/weixin/1/gota"
+			               "url":"http://mp.weixin.qq.com/s?__biz=MzAwNzQxNjg1NQ==&mid=501869427&idx=1&sn=aff1b42600aac7f8a55bdae00fa1e59d&scene=1&srcid=0926gjwpZwPUNaMpjhEb1UYN#rd"
 			            },
 			            {
 			               "type":"view",
 			               "name":"评价办法",
-			               "url":"http://weixin.cwrcpj.org/weixin/2/gota"
+			               "url":"http://mp.weixin.qq.com/s?__biz=MzAwNzQxNjg1NQ==&mid=501869433&idx=1&sn=576aac6ae3f3af4b37ae57c5644a8d76&scene=1&srcid=0926IMrCLSTYFLfJqBzzynM9#rd"
 			            },
 			            {
 			               "type":"view",
@@ -46,7 +46,7 @@ class WeixinUser < ApplicationRecord
 			            {
 			               "type":"view",
 			               "name":"申请评价",
-			               "url":"http://weixin.cwrcpj.org/weixin/3/gota"
+			               "url":"http://www.cwrcpj.org/_client/goToAuth?redirectUrl=http://www.cwrcpj.org:8051/personalInfor.html"
 			            }]
 			      },
 			      {
@@ -69,7 +69,7 @@ class WeixinUser < ApplicationRecord
 			           {	
 			               "type":"view",
 			               "name":"我的评价",
-			               "url":"http://weixin.cwrcpj.org/weixin/4/gota"
+			               "url":"http://www.cwrcpj.org/_client/goToAuth?redirectUrl=http://www.cwrcpj.org:8051/applyEvaluate.html"
 			            },
 			            {
 			               "type":"view",
@@ -77,7 +77,7 @@ class WeixinUser < ApplicationRecord
 			               "url":"http://m.cwrcpj.org/wx_auth?url=my_course"
 			            },
 			            {
-			               "type":"click",
+			               "type":"view",
 			               "name":"退出",
 			               "url":"http://m.cwrcpj.org/wx_auth?url=quit"
 			            }]

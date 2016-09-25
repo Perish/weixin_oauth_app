@@ -39,6 +39,7 @@ group :production do
 end
 
 gem 'weixin_authorize'
+gem 'actionpack-xml_parser'
 
 # bootstrap UI
 gem 'bootstrap', '~> 4.0.0.alpha3.1'

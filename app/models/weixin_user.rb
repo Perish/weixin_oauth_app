@@ -23,7 +23,7 @@ class WeixinUser < ApplicationRecord
 	end
 
 	def self.create_menu
-		menu =  {
+		menu = %Q| {
 			     "button":[
 			      {	
 			          "name":"人才评价",
@@ -82,7 +82,7 @@ class WeixinUser < ApplicationRecord
 			               "url":"http://m.cwrcpj.org/wx_auth?url=quit"
 			            }]
 			       }]
-			 }
+			 }|
 		response = $client.create_menu(menu)
 		Rails.logger.info "response===========#{response.inspect}"
 	end

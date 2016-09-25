@@ -24,7 +24,7 @@ class WeixinUser < ApplicationRecord
 			user_info = $client.user(xml[:FromUserName])
 			if user_info.en_msg == "ok"
 				result = user_info.result
-				wu.attributes = result.to_hash.slice(*accessible_attributes)
+				wu.attributes = result.to_hash.slice(:openid, :nickname, :sex, :province, :city, :country, :headimgurl, :privilege, :unionid, :language)
 				wu.save
 			end
 		end

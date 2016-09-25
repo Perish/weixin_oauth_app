@@ -14,9 +14,6 @@ class WeixinController < ApplicationController
 
 
 	def set_client
-		@client = case params[:id].to_i
-					when 0 then $client
-					when 1 then $client1
-					when 2 then $client2
+		
 	end
 end

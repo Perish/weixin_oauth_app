@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   resources :links
 
-  get "weixin/:id/receive" => "weixin#receive"
+  get "weixin/:id/receive" => "weixin#auth"
   post "weixin/:id/receive" => "weixin#receive"
 
   resources :weixin_users, only: [:index, :create] do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922160133) do
+ActiveRecord::Schema.define(version: 20160925165222) do
 
   create_table "links", force: :cascade do |t|
     t.string   "link"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20160922160133) do
     t.datetime "updated_at",           null: false
     t.string   "language"
     t.integer  "weixin_user_token_id"
+    t.string   "scene"
     t.index ["weixin_user_token_id"], name: "index_weixin_users_on_weixin_user_token_id"
   end
 

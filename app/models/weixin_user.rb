@@ -14,6 +14,22 @@ class WeixinUser < ApplicationRecord
 		RestClient.post link, {user_token: user_token, weixin_user: self, weixin_openids: openids}.to_json, :content_type => :json, :accept => :json
 	end
 
+	def self.deal_scan(xml)
+		wu = WeixinUser.where(openid: xml[:FromUserName]).first_or_initialize do |user|
+			user.scene = xml[:EventKey]
+		end
+		if wu.persisted?
+			wu.update_column(:scene, xml[:EventKey]) if xml[:EventKey].present?
+		else
+			user_info = $client.user(xml[:FromUserName])
+			if user_info.en_msg == "ok"
+				result = user_info.result
+				wu.attributes = result.to_hash.slice(*accessible_attributes)
+				wu.save
+			end
+		end
+	end
+
 	def openids
 		weixin_openids.select(:apid, :openid)
 	end

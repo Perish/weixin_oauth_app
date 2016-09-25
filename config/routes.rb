@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
+  resources :qrcodes
+
   resources :links
+
+  get "weixin/:id/receive" => "weixin#auth"
+  post "weixin/:id/receive" => "weixin#receive"
 
   resources :weixin_users, only: [:index, :create] do
   	collection do

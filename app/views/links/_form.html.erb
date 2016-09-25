@@ -11,17 +11,25 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <label>链接</label>
-    <%= f.text_field :link , width: "50%", required: true %>
+    <%= f.text_field :link, class: "form-control" %>
   </div>
-  <div class="field">
-    <label>链接类型</label>
-    <%= f.radio_button :link_type, 0 %>生产
-    <%= f.radio_button :link_type, 1 %>测试
+   <fieldset class="form-group">
+    <legend>链接类型</legend>
+    <div class="form-check">
+      <label class="form-check-label">
+        <%= f.radio_button :link_type, 0 %>生产
+      </label>
+    </div>
+    <div class="form-check">
+      <label class="form-check-label">
+        <%= f.radio_button :link_type, 1 %>测试
+      </label>
+    </div>
   </div>
  
-  <div class="actions">
-    <%= f.submit "提交" %>
+  <div class="form-group text-xs-center">
+    <%= f.submit "提交", class: "btn btn-primary" %>
   </div>
 <% end %>

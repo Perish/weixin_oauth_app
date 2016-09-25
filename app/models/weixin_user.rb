@@ -1,7 +1,7 @@
 class WeixinUser < ApplicationRecord
 	serialize :privilege, JSON
 	validates :openid, presence: true, uniqueness: true
-	belongs_to :weixin_user_token
+	belongs_to :weixin_user_token, optional: true
 	has_many :weixin_openids
 
 	def post_info(user_token, sing=0)

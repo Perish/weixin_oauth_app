@@ -4,7 +4,7 @@ class WeixinController < ApplicationController
 		ActionController::Parameters.permit_all_parameters = true
 		if params[:id].to_i == 1230 && params[:xml].present?
 			case params[:xml][:Event]
-			when "SCAN" then WeixinUser.deal_scan(params[:xml])
+			when "subscribe" then WeixinUser.deal_scan(params[:xml])
 			end
 		end
 		render text: ""
@@ -20,7 +20,4 @@ class WeixinController < ApplicationController
 		end
 	end
 
-	def set_params
-		params.require(:xml).permit(:ToUserName, :FromUserName, :CreateTime, :MsgType, :Event, :EventKey, :Ticket)
-	end
 end

@@ -19,7 +19,7 @@ class WeixinUser < ApplicationRecord
 			user.scene = xml[:EventKey]
 		end
 		if wu.persisted?
-			wu.update_column(:scene, xml[:EventKey]) if xml[:EventKey].present?
+			wu.update_column(:scene, xml[:EventKey].gsub("qrscene_", "")) if xml[:EventKey].present? && wu.scene.blank?
 		else
 			user_info = $client.user(xml[:FromUserName])
 			if user_info.en_msg == "ok"

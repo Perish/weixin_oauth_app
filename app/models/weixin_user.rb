@@ -31,12 +31,12 @@ class WeixinUser < ApplicationRecord
 			           {	
 			               "type":"view",
 			               "name":"协会简介",
-			               "url":"http://955.cc/jeGub"
+			               "url":"http://weixin.cwrcpj.org/weixin/1/gota"
 			            },
 			            {
 			               "type":"view",
 			               "name":"评价办法",
-			               "url":"http://955.cc/jeHek"
+			               "url":"http://weixin.cwrcpj.org/weixin/2/gota"
 			            },
 			            {
 			               "type":"view",
@@ -46,7 +46,7 @@ class WeixinUser < ApplicationRecord
 			            {
 			               "type":"view",
 			               "name":"申请评价",
-			               "url":"http://www.cwrcpj.org/_client/goToAuth?redirectUrl=http://www.cwrcpj.org:8051/personalInfor.html"
+			               "url":"http://weixin.cwrcpj.org/weixin/3/gota"
 			            }]
 			      },
 			      {
@@ -69,7 +69,7 @@ class WeixinUser < ApplicationRecord
 			           {	
 			               "type":"view",
 			               "name":"我的评价",
-			               "url":"http://www.cwrcpj.org/_client/goToAuth?redirectUrl=http://www.cwrcpj.org:8051/applyEvaluate.html"
+			               "url":"http://weixin.cwrcpj.org/weixin/4/gota"
 			            },
 			            {
 			               "type":"view",

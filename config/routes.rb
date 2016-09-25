@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get "weixin/:id/receive" => "weixin#receive"
   post "weixin/:id/receive" => "weixin#receive"
 
+  get "weixin/:id/gota" => "weixin#gota"
+
   resources :weixin_users, only: [:index, :create] do
   	collection do
   		get :code

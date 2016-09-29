@@ -12,12 +12,25 @@ class QrcodesController < ApplicationController
   def create
   	scene = params[:qrcode][:scene].to_s
   	@qrcode = Qrcode.new
-  	flash[:notice] = "请检查参数"
-  	render :new and return if scene.length > 64 || scene.length == 0
-  	result = $client.create_qr_limit_str_scene({scene_str: scene})
-  	render :new and return if result.en_msg != "ok"
-  	Qrcode.create({ticket: result.result["ticket"], url: result.result["url"], scene: scene, weixin_id: 0})
-  	redirect_to qrcodes_url, flash: {notice: "创建成功"}
+    flash[:notice] = "不能为空"
+    render :new and return if scene.blank?
+    ss = scene.split(",").reject{|x| x.blank?}
+    render :new and return if ss.blank?
+    arr = []
+    ss.each do |x|
+    	result = $client.create_qr_limit_str_scene({scene_str: x.strip})
+      if result.en_msg == "ok"
+    	   Qrcode.create({ticket: result.result["ticket"], url: result.result["url"], scene: x.strip, weixin_id: 0})
+      else
+        arr << x.strip
+      end
+    end
+    if arr.length > 0
+      notice = "这些  #{arr.join(",")}  没有创建成功"
+    else
+      notice = "创建成功"
+    end
+  	redirect_to qrcodes_url, flash: {notice: notice}
   end
 
 end

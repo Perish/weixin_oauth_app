@@ -2,7 +2,11 @@ class QrcodesController < ApplicationController
   before_action :require_login
   
   def index
-  	@qrcodes = Qrcode.all
+    @qrcodes = if params[:search].blank?
+  	             Qrcode.page(params[:page]).per(50)
+               else
+                 Qrcode.where("scene like ?", "%#{params[:search]}%").page(params[:page]).per(50)
+               end
   end
 
   def new

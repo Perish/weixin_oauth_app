@@ -1,6 +1,11 @@
 			<div class="card">
 			  <div class="card-block">
 			    <h4 class="card-title">二维码列表</h4>
+
+				  <form class="form-inline pull-xs-right">
+				    <input class="form-control" name="search" type="text" placeholder="搜索">
+				    <button class="btn btn-outline-success" type="submit">搜索</button>
+				  </form>
 				<table class="table">
 				  <thead class="thead-default">
 				    <tr>
@@ -19,6 +24,7 @@
 				  <% end %>
 				  </tbody>
 				</table>
+				<%= paginate(@qrcodes) unless @qrcodes.empty? %>
 				<%= link_to "添加", new_qrcode_path, class: "btn btn-primary" %>
 			  </div>
 			</div>

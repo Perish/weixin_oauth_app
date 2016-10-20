@@ -6,9 +6,11 @@
 				    <input class="form-control" name="search" type="text" placeholder="搜索">
 				    <button class="btn btn-outline-success" type="submit">搜索</button>
 				  </form>
+				  <%= form_tag download_qrcodes_path do %>
 				<table class="table">
 				  <thead class="thead-default">
 				    <tr>
+				      <th><input type="checkbox" class="select_all" />全选</th>
 				      <th>二维码</th>
 				      <th>参数</th>
 				      <th>公众号</th>
@@ -17,6 +19,9 @@
 				  <tbody>
 				  <% @qrcodes.each do |qrcode| %>
 					    <tr>
+					      <th>
+					      	<input type="checkbox" value="<%= qrcode.id %>" name="id[]" class="qrcode">
+					      </th>
 					      <th scope="row"><%= link_to qrcode.qrcode_default_url, target: "_blank" do %><%=image_tag qrcode.qrcode_default_url, size: "80x80" %><% end %></th>
 					      <td><%= qrcode.scene %></td>
 					      <td><%= ApplicationHelper::WEIXIN_PUBS[qrcode.weixin_id] %></td>
@@ -26,5 +31,16 @@
 				</table>
 				<%= paginate(@qrcodes) unless @qrcodes.empty? %>
 				<%= link_to "添加", new_qrcode_path, class: "btn btn-primary" %>
+				<%= submit_tag "下载", class: "btn btn-success" %>
+				<% end %>
 			  </div>
 			</div>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".select_all").change(function(e) {
+
+		})
+	})
+</script>

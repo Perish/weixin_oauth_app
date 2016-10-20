@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :qrcodes
+  resources :qrcodes do
+    collection do
+      post :download
+      get :attach
+    end
+  end
 
   resources :links
 

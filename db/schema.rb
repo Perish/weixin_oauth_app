@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160925165222) do
+ActiveRecord::Schema.define(version: 20161020073720) do
 
   create_table "links", force: :cascade do |t|
     t.string   "link"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20160925165222) do
     t.integer  "weixin_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "image"
     t.index ["scene"], name: "index_qrcodes_on_scene"
     t.index ["weixin_id"], name: "index_qrcodes_on_weixin_id"
   end

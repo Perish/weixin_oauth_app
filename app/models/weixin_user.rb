@@ -62,7 +62,7 @@ class WeixinUser < ApplicationRecord
 			            {
 			               "type":"view",
 			               "name":"申请评价",
-			               "url":"http://test.cwrcpj.org:8051/applyIndex.html"
+			               "url":"http://www.cwrcpj.org:8051/applyIndex.html"
 			            }]
 			      },
 			      {
